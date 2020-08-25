@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Context	crossContext="true"
+			docBase="C:\Users\mylik\git\board\board\WebContent\" 
+			privileged="true"
+			reloadable="false"
+>
+<!-- docBase 경로를 넣어주면 됨.
+	JNDI로 db injection을 할 예정임.
+ -->
+
+	<ResourceLink type="javax.sql.DataSource" global="jdbc/board" name="jdbc/board"/>
+	<WatchedResource>WEB-INF/web.xml</WatchedResource>
+</Context>

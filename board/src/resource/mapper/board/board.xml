@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="board.mapper.BoardMapper">
+
+<select id="getTest" parameterType="map" resultType="map">
+	SELECT	"1" AS TEST
+	  FROM  DUAL LIMIT 1;
+</select>
+</mapper>

@@ -9,7 +9,7 @@
 		http://www.springframework.org/schema/jdbc/spring-jdbc-4.3.xsd"
 >
 	<bean id="dataSource-board"		class="org.springframework.jndi.JndiObjectFactoryBean">
-		<property name="jndiName"		value="jdbc/board" />
+		<property name="jndiName"		value="jdbc/mysql/board" />
      	<property name="resourceRef"	value="true" />
   	</bean>
 </beans>

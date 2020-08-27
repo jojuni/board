@@ -34,18 +34,18 @@
     <script src="/vendor/datepicker/daterangepicker.js"></script>
     <script src="/js/common.js"></script>
     <!-- Main JS-->
-    <script src="/js/global.js"></script>
+    <script src="/js/global.js"></script>1
     <script src="/js/angular_1.6.9.min.js"></script>
 </head>
 
-<body ng-controller="mainCtrl" ng-init="init('{{msg}}')">
+<body ng-controller="mainCtrl" ng-init="init()">
     <div class="page-wrapper bg-gra-01 p-t-150 p-b-100 font-poppins">
         <div class="wrapper wrapper--w780">
             <div class="card card-3">
                 <div class="card-heading"></div>
                 <div class="card-body">
                     <div style="display: flex;">
-                         <h2 class="title">WC LOGIN</h2> <span><a href="/signup.do">Sign up</a></span>
+                         <h2 class="title">WC LOGIN</h2> <span><a href="/board/signup.do">Sign up</a></span>
                     </div>
                     <div id="form">
                         <div class="input-group">
@@ -67,12 +67,9 @@
         "use strict";
         var mainApp = window.mainApp || (window.mainApp = angular.module("WCApp", []));
         mainApp.controller("mainCtrl", function($scope){
-            $scope.init = function(msg){
+            $scope.init = function(){
                 $scope.loginForm = {};    
                 $scope.setEvent();
-                if(msg) {
-                    alert(msg);
-                }
             };
             $scope.setEvent = function(){
                 $("#USER_ID").on('focus', function(){

@@ -15,14 +15,8 @@
 	<!--
 		서비스 패키지 스캔
 	-->
-	<!-- <context:component-scan base-package="kr.gardenus.web.service, kr.gardenus.mo.service">
+	<context:component-scan base-package="board.service">
         <context:include-filter type="annotation"	expression="org.springframework.stereotype.Service"	/>
-		<context:include-filter type="annotation"	expression="com.gardenus.common.annotation.GuModule" />
 	</context:component-scan>
-	
-	
-		전역변수값
-	
-	<util:properties id="constConfig" location="classpath:properties/server.xml" /> -->
 	
 </beans>

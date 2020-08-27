@@ -8,18 +8,12 @@
 		http://mybatis.org/schema/mybatis-spring
 		http://mybatis.org/schema/mybatis-spring.xsd"
 >
-	<mybatis:scan
-		base-package="kr.gardenus.web.mapper,kr.gardenus.mo.mapper"
-		factory-ref="sqlSessionFactory-gardenus"
-		annotation="org.springframework.stereotype.Repository" />
+	<mybatis:scan base-package="board.mapper" factory-ref="sqlSessionFactory-board" annotation="org.springframework.stereotype.Repository" />
 		
 	<bean id="sqlSessionFactory-board" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource"			ref="dataSource-board" />
-		<property name="mapperLocations">
-  			<array>
-  				<!-- <value>classpath*:sql/mapper/gardenus/web/*.xml</value>
-  				<value>classpath*:sql/mapper/gardenus/mo/*.xml</value> -->
-  			</array>
-  		</property>
+		<property name="mapperLocations" 	value="classpath*:/mapper/board/*.xml" />
+  			
+  		
 	</bean>
 </beans>

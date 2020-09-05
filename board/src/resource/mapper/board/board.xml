@@ -3,8 +3,95 @@
 
 <mapper namespace="board.mapper.BoardMapper">
 
-<select id="getTest" parameterType="map" resultType="map">
-	SELECT	"1" AS TEST
-	  FROM  DUAL LIMIT 1;
+<select id="checkLogin" parameterType="String" resultType="Integer">
+	SELECT COUNT(1) AS CNT
+	  FROM T_USER
+	 WHERE USER_ID = #{USER_ID}
 </select>
+
+<insert id="insertUser" parameterType="hashmap">
+	<selectKey keyProperty="id" resultType="int" order="BEFORE">
+		SELECT ( SELECT IFNULL(MAX(USER_NO),0) + 1 FROM T_USER) FROM DUAL
+	</selectKey>
+	INSERT INTO T_USER(
+		USER_ID
+	  , USER_NAME
+	  , USER_PW
+	  , USE_FLAG
+	  , INSERT_USER_ID
+	) VALUES (
+	   #{USER_ID}
+	 , #{USER_NAME}
+	 , PASSWORD(#{USER_PW})
+	 , 'Y'
+	 , 'SYSTEM'
+	)
+</insert>
+
+<select id="loginUser" parameterType="map" resultType="map">
+	SELECT USER_ID
+	     , USER_NAME
+	  FROM T_USER
+	 WHERE USER_ID = #{USER_ID}
+	   AND USER_PW = PASSWORD(#{USER_PW})
+</select>
+
+
+<insert id="insertBoard" parameterType="hashmap">
+	<selectKey keyProperty="id" resultType="int" order="BEFORE">
+		SELECT ( SELECT IFNULL(MAX(NO),0) + 1 FROM T_BOARD) FROM DUAL
+	</selectKey>
+	INSERT INTO T_BOARD(
+		TITLE
+	  , CONTENTS
+	  , INSERT_USER_ID
+	) VALUES (
+	   #{TITLE}
+	 , #{CONTENTS}
+	 , #{WRITER}
+	)
+</insert>
+
+<update id="updateBoard" parameterType="hashmap">
+	UPDATE T_BOARD
+		SET TITLE = #{TITLE},
+		    CONTENTS = #{CONTENTS},
+		    UPDATE_DATETIME = NOW()
+	WHERE NO = #{NO}
+</update>
+
+<update id="deleteBoard" parameterType="hashmap">
+	UPDATE T_BOARD
+		SET USE_FLAG = 'N',
+		    UPDATE_DATETIME = NOW()
+	WHERE NO = #{NO}
+</update>
+
+<select id="getCntBoardList" parameterType="map" resultType="map">
+	SELECT COUNT(*)
+	  FROM T_BOARD
+	WHERE USE_FLAG = 'Y'  
+</select>
+
+<select id="getBoardList" parameterType="map" resultType="map">
+	SELECT NO as no
+	     , TITLE as title
+	     , INSERT_USER_ID as writer
+	     , INSERT_DATETIME as regDate
+	  FROM T_BOARD
+	WHERE USE_FLAG = 'Y' 
+</select>
+
+<select id="getBoard" parameterType="map" resultType="map">
+	SELECT NO as no
+	     , TITLE as title
+	     , CONTENTS as contents
+	     , INSERT_USER_ID as writer
+	     , INSERT_DATETIME as regDate
+	  FROM T_BOARD
+	WHERE USE_FLAG = 'Y' 
+	 	AND NO = #{NO}
+</select>
+
+
 </mapper>

@@ -12,7 +12,7 @@
     <meta name="keywords" content="Colorlib Templates">
 
     <!-- Title Page-->
-    <title>WC</title>
+    <title>Board</title>
 
     <!-- Icons font CSS-->
     <link href="/vendor/mdi-font/css/material-design-iconic-font.min.css" rel="stylesheet" media="all">
@@ -34,7 +34,7 @@
     <script src="/vendor/datepicker/daterangepicker.js"></script>
     <script src="/js/common.js"></script>
     <!-- Main JS-->
-    <script src="/js/global.js"></script>1
+    <script src="/js/global.js"></script> 		
     <script src="/js/angular_1.6.9.min.js"></script>
 </head>
 
@@ -45,20 +45,33 @@
                 <div class="card-heading"></div>
                 <div class="card-body">
                     <div style="display: flex;">
-                         <h2 class="title">WC LOGIN</h2> <span><a href="/board/signup.do">Sign up</a></span>
+                         <h2 class="title">Board</h2> <span><a href="/board/signup.do">Sign up</a></span>
                     </div>
-                    <div id="form">
-                        <div class="input-group">
-                            <input class="input--style-3" type="text" placeholder="ID" name="USER_ID" id="USER_ID">
-                        </div>
-                        <div class="input-group">
-                            <input class="input--style-3" type="password" placeholder="password" name="PASSWORD" id="PASSWORD">
-                        </div>
-                        <div id="comment" style="display: none;margin-top: -12px;height:33px;"></div>
-                        <div class="p-t-10">
-                            <button class="btn btn--pill btn--green" type="button" ng-click="login()">Login</button>
-                        </div>
+                    <div ng-show="${empty userInfo  }">
+	                    <div id="form">
+	                        <div class="input-group">
+	                            <input class="input--style-3" type="text" placeholder="ID" name="USER_ID" id="USER_ID">
+	                        </div>
+	                        <div class="input-group">
+	                            <input class="input--style-3" type="password" placeholder="password" name="USER_PW" id="USER_PW">
+	                        </div>
+	                        <div id="comment" style="display: none;margin-top: -12px;height:33px;"></div>
+	                        <div class="p-t-10">
+	                            <button class="btn btn--pill btn--green" type="button" ng-click="login()">Login</button>
+	                        </div>
+	                    </div>
                     </div>
+                    <div ng-show="${not empty userInfo}">
+	                    <div>
+	                        <div class="input-group">
+	                        	ID : ${userInfo.USER_ID }
+	                        </div>
+	                        <div class="input-group">
+	                            NAME : ${userInfo.USER_NAME }
+	                        </div>
+	                    </div>
+                    </div>
+                    
                 </div>
             </div>
         </div>
@@ -84,7 +97,7 @@
             $scope.login = function(){
                 $scope.loginForm = {
                     USER_ID : $("#USER_ID").val() || '',
-                    PASSWORD : $("#PASSWORD").val() || ''
+                    USER_PW : $("#USER_PW").val() || ''
                 }
                 if(checkValidation($scope.loginForm)) {
                     for(let key in $scope.loginForm) {
@@ -96,17 +109,24 @@
                     }
                     return false;
                 }   
+                
                 $.ajax({
                     type: "post",
-                    url: "/login.json",
-                    data : $scope.loginForm,
-                    success : function(result){
-                        if (result.msg == "OK"){
-                           location.href = '/chat.do';
+                    url: "/board/loginUser.json",
+                    contentType: "application/json; charset=utf-8",
+                    data : JSON.stringify($scope.loginForm),
+                    success : function(data){
+                        if (data.msg == "OK"){
+                           location.href = '/board/main.do';
                        }
+                     
+                    }
+                    , error : function(data){
+                    	console.log(data);
                     }
                 });
             };
+          
         });
     </script>
 </body><!-- This templates was made by Colorlib (https://colorlib.com) -->

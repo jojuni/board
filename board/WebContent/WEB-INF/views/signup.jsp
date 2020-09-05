@@ -11,7 +11,7 @@
     <meta name="keywords" content="Colorlib Templates">
 
     <!-- Title Page-->
-    <title>WC</title>
+    <title>Board</title>
     <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css'>
     <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.2/css/font-awesome.min.css'>
     
@@ -38,9 +38,9 @@
                 <div class="card-heading"></div>
                 <div class="card-body">
                     <div style="display: flex;">
-                         <h2 class="title">WC SIGN UP</h2>
+                         <h2 class="title">SIGN UP</h2>
                     </div>
-                    <form id="form" action="/signup.json" method="post" enctype="multipart/form-data">
+                    <form id="form" action="/board/signup.do" method="post">
                         <div class="input-group" style="display: flex;" id="checkForm">
                             <input class="input--style-3" type="text" placeholder="ID" name="USER_ID" id="USER_ID">
                             <button class="btn btn--blue" type="button" style="width: 90px;padding: 0 0;" id="CHK_DUPL" checking="false">CHK</button>
@@ -50,14 +50,11 @@
                             <input class="input--style-3" type="text" placeholder="NAME" name="USER_NAME" id="USER_NAME">
                         </div>
                         <div class="input-group">
-                            <input class="input--style-3" type="text" placeholder="LANGUAGE" name="USER_LANG_TYPE" id="USER_LANG_TYPE">
+                            <input class="input--style-3" type="password" placeholder="password" name="USER_PW" id="USER_PW">
                         </div>
-                        <div class="input-group">
-                            <input class="input--style-3" type="password" placeholder="password" name="PASSWORD" id="PASSWORD">
-                        </div>
-                        <div class="input-group">
+                        <!-- <div class="input-group">
                             <input class="input--style-3" type="file" placeholder="USER_IMG" name="USER_IMG" id="USER_IMG">
-                        </div>
+                        </div> -->
                         <div class="p-t-10">
                             <button class="btn btn--pill btn--green" type="submit" id="submit">Sign Up</button>
                         </div>
@@ -86,35 +83,36 @@
                 if (!userid) {
                     $("#USER_ID").css('border', '1px solid red');
                     $("#checkForm").css('margin-bottom', '12px');
-                    $("#comment").text('please enter userId');
+                    $("#comment").text('ID입력 해 새캬!');
                     $("#comment").css('color', 'red');
                     $("#comment").show();
                     return;
                 }
+                
                 $.ajax({
-                    type: "post",
-                    url: "checkDupl.json",
-                    data : {userid : userid},
-                    success : function(result){
-                        if (result == "DUPL") {
-                            $("#USER_ID").css('border', '1px solid red');
+                    type: "POST",
+                    url: "/board/checkLogin.json",
+                    contentType: "application/json; charset=utf-8",
+                    data : userid,
+                    success : function(res){
+                    	if (res.count > 0) {
+                    		$("#USER_ID").css('border', '1px solid red');
                             $("#checkForm").css('margin-bottom', '12px');
-                            $("#comment").text('duplicated userId');
+                            $("#comment").text('못만들어 새캬!!');
                             $("#comment").css('color', 'red');
                             $("#comment").show();
                             $("#CHK_DUPL").attr('checking', false);
                             $("#CHK_DUPL").css('border', '1px solid red');
-                         
-                        } else {
-                            $("#USER_ID").css('border', '1px solid green');
-                            $("#checkForm").css('margin-bottom', '12px');
-                            $("#comment").text("It's possible to use");
-                            $("#comment").css('color', 'green');
-                            $("#comment").show();
-                            $("#CHK_DUPL").attr('checking', true);
-                            $("#CHK_DUPL").css('border', '1px solid green');
-                        }
-                    }
+                    	} else {
+                    		 $("#USER_ID").css('border', '1px solid green');
+                             $("#checkForm").css('margin-bottom', '12px');
+                             $("#comment").text("만들수 있어 새캬!!!");
+                             $("#comment").css('color', 'green');
+                             $("#comment").show();
+                             $("#CHK_DUPL").attr('checking', true);
+                             $("#CHK_DUPL").css('border', '1px solid green');
+                    	}
+                     }
                 });
             });
             $("#USER_ID").on('focus', function(){
@@ -135,10 +133,9 @@
                     USER_ID : $("#USER_ID").val() || '',
                     USER_NAME : $("#USER_NAME").val() || '',
                     USER_LANG_TYPE : $("#USER_LANG_TYPE").val() || '',
-                    PASSWORD : $("#PASSWORD").val() || '',
-                    USER_IMG : $("#USER_IMG").val() || ''
+                    PASSWORD : $("#PASSWORD").val() || ''
                 };
-                if(checkValidation(param)) {
+                /* if(checkValidation(param)) {
                     for(let key in param) {
                         if (param[key] == ''){
                             $("#" + key).css('border', '1px solid red');
@@ -146,8 +143,9 @@
                             $("#" + key).css('border', '0');
                         }
                     }
+                    alert("요기");
                     return false;
-                }   
+                }    */
                 return true;
             });
         });

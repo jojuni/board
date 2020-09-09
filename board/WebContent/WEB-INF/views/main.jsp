@@ -49,7 +49,7 @@
             <div style="color: white;float: right;">${userInfo.USER_ID}님 안녕하세요
             <br>
             <a ng-click="logout()" style="color: white;float: right;">logout</a>
-             < /div>
+             </div>
             
             <div class="ui large form">
                 <div class="ui stacked segment">
@@ -120,6 +120,21 @@
     <script src="/js/jquery.bpopup.min.js"></script>
     
 	 <script>    
+		$(document).keyup(function(e) {	// esc키로도 팝업창을 닫을 수 있어서 esc키 감지 하는 기능 추가
+		     if (e.keyCode == 27) { // escape key maps to keycode `27`
+		    	 closePop();
+		    }
+		});
+		
+		// 수정모드일 때, esc키나 닫기버튼으로 팝업창 닫으면 수정을 위해 추가된 input이나 textarea삭제하고 기존에 보이던 제목과 내용이 보이도록 수정 
+		function closePop(){
+			document.getElementById('title').removeAttribute('class');
+   			$("#u_title").remove();
+   			
+   			document.getElementById('content').removeAttribute('class');
+			$("#u_contents").remove();
+		}
+	 
         "use strict";
         var mainApp = window.mainApp || (window.mainApp = angular.module("WCApp", []));
         mainApp.controller("mainCtrl", function($scope){
@@ -140,14 +155,17 @@
             };
             
             $scope.setEvent = function() {
-           		$("#title").dblclick(function(){
+           		$("#title").unbind('dblclick').dblclick(function(){
                		if ($scope.info && $scope.info.writer == '${userInfo.USER_ID}') {
-               			$("#title").html("<input type='text' name='u_title' id='u_title'/>");
+               			document.getElementById('title').setAttribute('class','ng-hide');		// 기존 제목 보이는 부분 숨김처리
+               			$("#title").before("<input type='text' name='u_title' id='u_title'/>");	// 기존 제목 보이는 부분 대신 새로 입력하는 창 생성
+               			
                		}		
                	});	
-   				$("#content").dblclick(function(){
+   				$("#content").unbind('dblclick').dblclick(function(){
    					if ($scope.info && $scope.info.writer == '${userInfo.USER_ID}') {
-   						$("#content").html("<textarea name='u_contents' id='u_contents'></textarea>");
+   						document.getElementById('content').setAttribute('class','ng-hide');		// 기존 내용 보이는 부분 숨김처리
+   						$("#content").before("<textarea name='u_contents' id='u_contents'></textarea>");	// 기존 내용 보이는 부분 대신 새로 입력하는 창 생성
    					}
                	});	
    				
@@ -179,7 +197,7 @@
             $scope.getBoard = function() {
             	var no = 0;
             	no = $scope.data.list[this.$index].no;
-            	
+            	$scope.info = null;
             	$.ajax({
                     type: "post",
                     url: "/board/getBoard.json",
@@ -195,19 +213,14 @@
 							  modalClose:false
 						  });
                     	  $scope.$apply();
-						  
                        }
                     }
                 });
             }
             
             $scope.close = function(){
-        		$("#title").html("<span id='title'>"+ $scope.info.title + "</span>");
-        		$("#content").html("<div class='description'>"
-                    	+"<p style = 'text-align: right' id = 'b_review'></p>"
-                    	+"<div id = 'content'>"+$scope.info.contents+"</div>"
-                    +"</div>");
-        		
+            	closePop();							// 팝업창 닫을 때 수정상태 였을 때 원복시키기 위한 부분 함수로 뻄
+       			
         		$('#view_modal').bPopup().close();
             }
             
